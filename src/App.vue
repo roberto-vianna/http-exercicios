@@ -1,4 +1,3 @@
-
 <script>
 import UserList from "./components/UserList.vue";
 import UserForm from "./components/UserForm.vue";
@@ -14,35 +13,50 @@ export default {
       messages: [],
       showModal: false,
       users: [],
+      selectedUser: { id: null, email: "", first_name: "", last_name: "" },
+      isEditing: false,
     };
   },
   methods: {
-    openModal() {
+    openModal(isEditing, user) {
+      this.isEditing = isEditing;
+      this.selectedUser = { ...user };
       this.showModal = true;
     },
     closeModal() {
       this.showModal = false;
     },
-    addUser(user) {
-      api
-        .createUser(user)
-        .then((response) => {
+    saveUser(user) {
+      if (this.isEditing) {
+        api.updateUser(user.id, user).then(() => {
+          this.users = this.users.map((u) => (u.id === user.id ? user : u));
+          this.messages.push({
+            text: "Usuário atualizado com sucesso!",
+            type: "success",
+          });
+        });
+      } else {
+        api.createUser(user).then((response) => {
           this.users.push(response.data);
-          this.closeModal();
           this.messages.push({
             text: "Usuário cadastrado com sucesso!",
             type: "success",
           });
-        })
-        .catch((error) => {
-          this.messages.push({
-            text: "Erro ao cadastrar usuário!",
-            type: "danger",
-          });
         });
+      }
+      this.closeModal();
+    },
+    deleteUser(user) {
+      api.deleteUser(user.id).then(() => {
+        this.users = this.users.filter((u) => u.id !== user.id);
+        this.messages.push({
+          text: "Usuário excluído com sucesso!",
+          type: "success",
+        });
+      });
     },
     listUsers() {
-      api.getUsers().then((response) => {
+      api.getUsers(1).then((response) => {
         this.users = response.data.data;
       });
     },
@@ -55,9 +69,8 @@ export default {
 
 <template>
   <div id="app" class="container">
- 
     <h1>Gerenciamento de Usuários</h1>
-    <div v-if="messages.length" class="floating-alert">
+    <div class="floating-alert">
       <b-alert 
         v-for="(message, index) in messages" 
         :key="index" 
@@ -67,8 +80,8 @@ export default {
         {{ message.text }}
       </b-alert>
     </div>
-    <UserList :users="users" @add-user="openModal" />
-    <UserForm v-if="showModal" @close-modal="closeModal" @user-added="addUser" />
+    <UserList :users="users" @add-user="openModal(false)" @edit-user="openModal(true, $event)" @delete-user="deleteUser" />
+    <UserForm v-if="showModal" :user="selectedUser" :isEditing="isEditing" @close-modal="closeModal" @user-saved="saveUser" />
   </div>
 </template>
 
