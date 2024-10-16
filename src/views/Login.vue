@@ -35,11 +35,8 @@
     },
     methods: {
       handleLogin() {
-        // Validações podem ser feitas aqui
         if (this.email && this.password) {
-          // Simulação de login
-          // Futuramente, aqui será feita a autenticação real
-          this.$router.push('/users'); // Redireciona para a página de gerenciamento de usuários
+          this.$router.push('/users');
         } else {
           alert("Preencha todos os campos!");
         }
