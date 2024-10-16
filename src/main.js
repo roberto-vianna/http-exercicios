@@ -1,6 +1,7 @@
 import '@babel/polyfill'
 import Vue from 'vue'
 import App from './App.vue'
+import router from './router'  // Importar o router
 
 // Importar o BootstrapVue e os plugins de ícones
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
@@ -18,6 +19,8 @@ Vue.use(IconsPlugin)
 
 Vue.config.productionTip = false
 
+// Adicionar o router à instância Vue
 new Vue({
+  router,  // Registrar o router aqui
   render: h => h(App),
 }).$mount('#app')
