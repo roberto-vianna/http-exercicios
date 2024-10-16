@@ -1,7 +1,7 @@
 <script>
 export default {
   props: {
-    user: { // Alterado para "compra"
+    user: {
       type: Object,
       default: () => ({ id: null, descricao: "", nome_cliente: "", valor: "", endereco: "", status: "fiado" }),
     },
@@ -12,12 +12,12 @@ export default {
   },
   data() {
     return {
-      formCompra: { ...this.user }, // Alterado para "formCompra"
+      formCompra: { ...this.user },
     };
   },
   methods: {
     submitForm() {
-      this.$emit("user-saved", this.formCompra); // Emite o evento com a compra
+      this.$emit("user-saved", this.formCompra);
       this.formCompra = { id: null, descricao: "", nome_cliente: "", valor: "", endereco: "", status: "fiado" }; // Resetar o formulário
     },
     closeModal() {
@@ -28,7 +28,7 @@ export default {
     user: {
       immediate: true,
       handler(newUser) {
-        this.formCompra = { ...newUser }; // Atualiza o formulário com a compra
+        this.formCompra = { ...newUser };
       },
     },
   },
@@ -38,27 +38,18 @@ export default {
 <template>
   <b-modal @hide="closeModal" :title="isEditing ? 'Editar Compra' : 'Adicionar Nova Compra'" visible hide-footer>
     <b-form @submit.prevent="submitForm">
-      <!-- Campo para Descrição da Compra -->
       <b-form-group>
         <b-form-input v-model="formCompra.descricao" placeholder="Digite a descrição do remédio" required></b-form-input>
       </b-form-group>
-
-      <!-- Campo para Nome do Cliente -->
       <b-form-group class="py-2">
         <b-form-input v-model="formCompra.nome_cliente" placeholder="Digite o nome do cliente" required></b-form-input>
       </b-form-group>
-
-      <!-- Campo para Valor da Compra -->
       <b-form-group>
         <b-form-input type="number" v-model="formCompra.valor" placeholder="Digite o valor" required></b-form-input>
       </b-form-group>
-
-      <!-- Campo para Endereço do Cliente -->
       <b-form-group>
         <b-form-input type="text" v-model="formCompra.endereco" placeholder="Digite o endereço" required></b-form-input>
       </b-form-group>
-
-      <!-- Campo para Status da Compra (Fiado ou Pago) -->
       <b-form-group>
         <p>Selecione o status</p>
         <b-form-select v-model="formCompra.status" required>

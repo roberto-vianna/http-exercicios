@@ -41,7 +41,7 @@ export default {
     return {
       messages: [],
       showModal: false,
-      compras: [], // Agora estamos lidando com compras em vez de usuários
+      compras: [],
       selectedCompra: { 
         id: null, 
         descricao: "", 
@@ -63,7 +63,7 @@ export default {
       this.showModal = false;
     },
     saveCompra(compra) {
-      if (this.isSubmitting) return; // Impede múltiplos envios
+      if (this.isSubmitting) return;
       this.isSubmitting = true;
 
       if (this.isEditing) {
@@ -73,17 +73,17 @@ export default {
             text: "Compra atualizada com sucesso!",
             type: "success",
           });
-          this.isSubmitting = false; // Libera o envio após a resposta
+          this.isSubmitting = false;
           this.closeModal();
         });
       } else {
         api.createCompra(compra).then(() => {
-          this.listCompras(); // Recarrega a lista de compras, sem precisar adicionar manualmente
+          this.listCompras();
           this.messages.push({
             text: "Compra cadastrada com sucesso!",
             type: "success",
           });
-          this.isSubmitting = false; // Libera o envio após a resposta
+          this.isSubmitting = false; 
           this.closeModal();
         });
       }
@@ -105,7 +105,7 @@ export default {
     },
   },
   created() {
-    this.listCompras(); // Chama o método para listar compras ao criar o componente
+    this.listCompras();
   },
 };
 </script>
